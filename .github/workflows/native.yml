@@ -1,0 +1,29 @@
+name: Native Windows build
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    env:
+      QT_QPA_PLATFORM: offscreen
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: python -m pip install -r requirements-build.txt
+      - run: python -m pytest -q
+      - run: python build.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: AmerikaSocial-Windows
+          path: release/*
+          if-no-files-found: error
+          retention-days: 14
