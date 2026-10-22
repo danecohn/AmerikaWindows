@@ -25,12 +25,12 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force validation | Out-Null
-          $appProcess = Start-Process -FilePath 'dist/AmerikaSocial/AmerikaSocial.exe' -ArgumentList @('--smoke-test', 'validation/native-smoke.png') -WindowStyle Hidden -PassThru -Wait
+          $appProcess = Start-Process -FilePath 'dist/MakkSocial/MakkSocial.exe' -ArgumentList @('--smoke-test', 'validation/native-smoke.png') -WindowStyle Hidden -PassThru -Wait
           if ($appProcess.ExitCode -ne 0) { throw 'Native startup failed' }
           if (-not (Test-Path 'validation/native-smoke.png')) { throw 'Native preview missing' }
       - uses: actions/upload-artifact@v7
         with:
-          name: AmerikaSocial-Windows
+          name: MakkSocial-Windows
           path: |
             release/*
             validation/*.png
