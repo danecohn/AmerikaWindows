@@ -218,7 +218,7 @@ class MainWindow(QMainWindow):
         self.login.cancel();self.poller.stop();self.tray.hide();super().closeEvent(event)
 
 def main():
-    app=QApplication(sys.argv);app.setOrganizationName('AltStack LLC');app.setApplicationName('AltStack Social');app.setApplicationDisplayName('AltStack Social');app.setApplicationVersion('1.1.0')
+    app=QApplication(sys.argv);app.setOrganizationName('AltStack LLC');app.setApplicationName('AltStack Social');app.setApplicationDisplayName('AltStack Social');app.setApplicationVersion('1.1.1')
     font_id=QFontDatabase.addApplicationFont(str(asset_path('Inter.ttf')))
     if font_id>=0:app.setFont(QFont(QFontDatabase.applicationFontFamilies(font_id)[0],11))
     smoke='--smoke-test' in sys.argv
