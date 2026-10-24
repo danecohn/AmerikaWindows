@@ -1,4 +1,4 @@
-# AltStack Social 1.2.0
+# AltStack Social 1.2.1
 
 A global AltStack account: country badges follow your selected country or region, editable from desktop account settings. Human confirmation replaces American membership confirmation. Browser account approval provides the same signup, country choice, CAPTCHA and recovery codes as the website.
 

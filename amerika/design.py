@@ -42,7 +42,7 @@ BRAND_SVG=b'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 768 768" role="
 
 class LogoMark(QWidget):
     def __init__(self,size=44):
-        super().__init__();self.setFixedSize(size,size);self.setAccessibleName('AltStack LLC cherry blossom logo');self.renderer=QSvgRenderer(QByteArray(BRAND_SVG),self)
+        super().__init__();self.setFixedSize(size,size);self.setAccessibleName('AltStack LLC logo');self.renderer=QSvgRenderer(QByteArray(BRAND_SVG),self)
     def paintEvent(self,event):
         painter=QPainter(self);self.renderer.render(painter,QRectF(self.rect()));painter.end()
 
