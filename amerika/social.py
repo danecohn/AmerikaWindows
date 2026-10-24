@@ -8,10 +8,15 @@ from .design import Avatar,action,icon,timestamp,PostText,LogoMark
 
 def handle(actor):return '@'+actor.get('handle','').removesuffix('.pds.amerika.social')
 
+def country_badge(actor):
+    country=actor.get('countryDesignation') or {};code=country.get('code','')
+    return (''.join(chr(127397+ord(c)) for c in code)+' '+country.get('label',code)) if len(code)==2 else ''
+
 def person(app,actor):
     w=QWidget();layout=QVBoxLayout(w)
     label=actor.get('name','Account')+' '+('✓ ' if actor.get('verified') or actor.get('plus') else '')+handle(actor)
     name=button(label,lambda:app.profile(actor['id']));name.setObjectName('authorName');layout.addWidget(row(Avatar(app.api,actor),name))
+    if country_badge(actor):layout.addWidget(text(country_badge(actor)))
     if actor.get('bio'):layout.addWidget(text(actor['bio']))
     friendship='Mutual friends' if actor.get('friendship')=='mutual' else 'You added them' if actor.get('following') else 'They added you' if actor.get('followsYou') else 'Not connected yet'
     layout.addWidget(text(friendship))
@@ -163,7 +168,7 @@ class Profile(Page):
         def done(data):
             a=data['actor'];clear(self.details)
             if a.get('photo'):self.details.addWidget(Media(self.api,{'url':a['photo'],'alt':a['name']}))
-            self.details.addWidget(person(self.app,a));self.details.addWidget(text(a.get('americanStatus','Self declared American')))
+            self.details.addWidget(person(self.app,a));self.details.addWidget(text(country_badge(a)))
             self.details.addWidget(row(*[button(label,lambda key=k:self.app.friends_list(a['id'],key)) for label,k in [('Friends','friends'),('Added','added'),('Mutual','mutual')]]))
             if self.app.me and a['id']!=self.app.me['id']:
                 self.details.addWidget(row(self.action('Unblock account' if a.get('blocking') else 'Block account','account/block',{'subject':a['id'],'blocked':not a.get('blocking')},warning='Change blocking for this account and its linked bots?'),button('Report',lambda:self.app.report(a['id'],'account'))))

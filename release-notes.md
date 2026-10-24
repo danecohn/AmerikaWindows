@@ -1,3 +1,9 @@
+# AltStack Social 1.2.0
+
+A global AltStack account: country badges follow your selected country or region, editable from desktop account settings. Human confirmation replaces American membership confirmation. Browser account approval provides the same signup, country choice, CAPTCHA and recovery codes as the website.
+
+Six native packages: Windows x64 and ARM64, macOS Intel and Apple Silicon, Linux x64 and ARM64. Uses the working platform origin until the new root domain is active.
+
 AltStack Social 1.1.2 - Early access
 
 Rebuilt native Qt apps with the official AltStack logo, silver interface, shared AltStack accounts, feeds, messages, communities and account tools.
