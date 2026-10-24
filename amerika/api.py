@@ -12,7 +12,9 @@ from PySide6.QtCore import QObject, Signal, QUrl, QFile, QIODevice, QTimer, QSet
 from PySide6.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
 from PySide6.QtGui import QDesktopServices
 
-ORIGIN = 'https://altstack.io'
+# Keep existing accounts reachable while the new domain's TLS is provisioned.
+ORIGIN = 'https://www.amerika.social'
+PRIMARY_ORIGIN = 'https://altstack.org'
 MAX_UPLOAD = 250_000_000
 
 def media_mime(path):
