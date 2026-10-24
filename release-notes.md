@@ -1,4 +1,4 @@
-AltStack Social 1.1.1 - Early access
+AltStack Social 1.1.2 - Early access
 
 Rebuilt native Qt apps with the official AltStack logo, silver interface, shared AltStack accounts, feeds, messages, communities and account tools.
 
@@ -6,5 +6,4 @@ Windows x64 and ARM64 portable ZIPs; macOS Intel and Apple Silicon DMGs; Linux x
 
 Requires Windows 11, macOS 14+, or Ubuntu 24.04+ with a desktop keyring. Builds are unsigned; macOS apps are ad-hoc signed, not Developer ID signed or notarized. No automatic updater. SHA-256 sidecars accompany every package.
 
-Connects to https://altstack.org using your shared AltStack account. These apps are part of the coordinated AltStack domain rollout and require working HTTPS on that domain.
-
+Uses the working AltStack account service at www.amerika.social during migration. It automatically chooses altstack.org after HTTPS works and the server announces that canonical origin. No session credentials are sent during domain discovery.

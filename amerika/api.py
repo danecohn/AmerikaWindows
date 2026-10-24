@@ -12,7 +12,21 @@ from PySide6.QtCore import QObject, Signal, QUrl, QFile, QIODevice, QTimer, QSet
 from PySide6.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
 from PySide6.QtGui import QDesktopServices
 
-ORIGIN = 'https://altstack.org'
+def _production_origin():
+    # A valid TLS connection and the server's canonical origin gate the domain move.
+    # No passwords or session credentials are sent during discovery.
+    import json
+    import urllib.request
+    try:
+        with urllib.request.urlopen('https://altstack.org/api/config', timeout=3) as response:
+            config = json.load(response)
+        if config.get('canonicalOrigin') == 'https://altstack.org':
+            return 'https://altstack.org'
+    except Exception:
+        pass
+    return 'https://www.amerika.social'
+
+ORIGIN = _production_origin()
 MAX_UPLOAD = 250_000_000
 
 def media_mime(path):
