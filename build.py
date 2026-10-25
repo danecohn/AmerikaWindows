@@ -22,7 +22,7 @@ if not arch:raise SystemExit('Unsupported build architecture: '+platform.machine
 if sys.platform=='darwin':
     app=root/'dist/AltStackSocial.app'
     import plistlib
-    info=app/'Contents/Info.plist';data=plistlib.loads(info.read_bytes());data.update(CFBundleName='AltStack Social',CFBundleDisplayName='AltStack Social',CFBundleShortVersionString='1.1.2',CFBundleVersion='4',NSLocationWhenInUseUsageDescription='Optionally verify US presence or display approximate Dating distance.',NSHighResolutionCapable=True);info.write_bytes(plistlib.dumps(data))
+    info=app/'Contents/Info.plist';data=plistlib.loads(info.read_bytes());data.update(CFBundleName='AltStack Social',CFBundleDisplayName='AltStack Social',CFBundleShortVersionString='1.3.0',CFBundleVersion='5',NSLocationWhenInUseUsageDescription='Optionally verify US presence or display approximate Dating distance.',NSHighResolutionCapable=True);info.write_bytes(plistlib.dumps(data))
     # Ad-hoc signing allows local testing. Public distribution still requires Developer ID signing and notarization.
     subprocess.run(['codesign','--force','--deep','--sign','-',str(app)],check=True)
     subprocess.run(['hdiutil','create','-volname','AltStack Social','-srcfolder',str(app),'-ov','-format','UDZO',str(release/f'AltStackSocial-macos-{arch}.dmg')],check=True)

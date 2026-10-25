@@ -75,6 +75,37 @@ def asset_path(name):return Path(getattr(sys,'_MEIPASS',Path(__file__).resolve()
 
 STYLE += '\nQMainWindow::separator {background:#aabcc9;}\nQWidget#sidebar {background:qlineargradient(x1:0,y1:0,x2:1,y2:0,stop:0 #e4ebf2,stop:1 #d1dde8);border-right:1px solid #adbdcc;}\nQMenuBar {background:qlineargradient(x1:0,y1:0,x2:0,y2:1,stop:0 #ffffff,stop:1 #d7e1e9);color:#263e52;border-bottom:1px solid #afbdca;}\nQMenuBar::item:selected,QMenu::item:selected {background:#d5eaff;color:#9d0036;}\nQMenu {background:#f8fafc;color:#263e52;border:1px solid #a8b9c7;}\nQWidget#card,QWidget#composeCard,QWidget#sectionCard {background:#ffffff;border:1px solid #becdd9;border-radius:8px;}\nQPushButton {background:qlineargradient(x1:0,y1:0,x2:0,y2:1,stop:0 #fff,stop:1 #dce5ee);color:#2c455a;border:1px solid #acbdcb;border-radius:6px;padding:9px 14px;}\nQPushButton#primary {background:qlineargradient(x1:0,y1:0,x2:0,y2:1,stop:0 #ff8db4,stop:1 #1764bd);color:#26000d;border-color:#c90045;font-weight:700;}\nQPushButton:focus,QLineEdit:focus,QTextEdit:focus,QPlainTextEdit:focus {border:2px solid #1764bd;}\nQLineEdit,QTextEdit,QPlainTextEdit,QComboBox {background:#fff;color:#263e52;border:1px solid #afbfcd;border-radius:6px;padding:8px;selection-background-color:#ffb5ce;selection-color:#26000d;}\nQPushButton#threadClose,QPushButton#threadMinimize,QPushButton#threadMaximize {border-radius:12px;padding:0;font-size:18px;font-weight:700;min-height:24px;max-height:24px;min-width:24px;max-width:24px;}\nQPushButton#threadClose {background:qradialgradient(cx:.4,cy:.2,radius:.9,stop:0 #ffd4ca,stop:.5 #ed796d,stop:1 #be4036);border:1px solid #a43f36;color:#661a15;}\nQPushButton#threadMinimize {background:qradialgradient(cx:.4,cy:.2,radius:.9,stop:0 #fff3c0,stop:.5 #f0cb61,stop:1 #c9a33e);border:1px solid #ad8a32;color:#63501d;}\nQPushButton#threadMaximize {background:qradialgradient(cx:.4,cy:.2,radius:.9,stop:0 #e5ffc5,stop:.5 #a2d46e,stop:1 #6ba742);border:1px solid #6b9641;color:#344e1e;}\nQWidget#threadChrome {background:qlineargradient(x1:0,y1:0,x2:0,y2:1,stop:0 #fff,stop:1 #d5e0e9);border-bottom:1px solid #b0c0cd;border-radius:7px;padding:6px;}\nQToolTip {background:#fff4f8;color:#293f53;border:1px solid #c4a8b3;}\n'
 
+# Artemis Softworks LLC · Moonrise companion interface.
+STYLE += """
+QMainWindow,QWidget#main {background:#f5f5f7;color:#1d1d1f;}
+QWidget#sidebar {background:qlineargradient(x1:0,y1:0,x2:0,y2:1,stop:0 #f5f7fb,stop:1 #eaf2ff);border-right:1px solid #d5dce8;}
+QMenuBar,QWidget#threadChrome {background:qlineargradient(x1:0,y1:0,x2:0,y2:1,stop:0 #ffffff,stop:1 #e9eef7);color:#1d1d1f;border-color:#d5dce8;}
+QMenu {background:#ffffff;color:#1d1d1f;border:1px solid #d5dce8;}
+QMenuBar::item:selected,QMenu::item:selected,QPushButton#nav[selected="true"] {background:#eaf2ff;color:#0055aa;border-color:#cbd8ed;}
+QWidget#card,QWidget#composeCard,QWidget#sectionCard {background:#ffffff;border:1px solid #d5dce8;border-radius:12px;}
+QPushButton {background:qlineargradient(x1:0,y1:0,x2:0,y2:1,stop:0 #ffffff,stop:1 #e0e8dd);color:#1d1d1f;border:1px solid #b7c6bd;border-radius:8px;padding:9px 14px;}
+QPushButton#primary {background:qlineargradient(x1:0,y1:0,x2:0,y2:1,stop:0 #1685ef,stop:1 #0066cc);color:white;border-color:#0066cc;}
+QPushButton#primary:hover {background:#617f88;}
+QPushButton:focus,QLineEdit:focus,QTextEdit:focus,QPlainTextEdit:focus {border:2px solid #0066cc;}
+QLineEdit,QTextEdit,QPlainTextEdit,QComboBox {background:#ffffff;color:#1d1d1f;border:1px solid #d5dce8;selection-background-color:#b8cdc9;selection-color:#1d1d1f;}
+QCheckBox::indicator:checked {background:#0066cc;border-color:#0066cc;}
+QToolTip {background:#ffffff;color:#1d1d1f;border:1px solid #d5dce8;}
+"""
+
+STYLE += """
+QMainWindow,QWidget#appShell {background:#f5f5f7;}
+QPushButton {background:#f4f6fa;border-color:#d5dce8;}
+QPushButton:hover {background:#eaf2ff;color:#1d1d1f;}
+QPushButton#primary:hover {background:#005bb5;color:white;}
+QPushButton#nav:hover {background:#eaf2ff;color:#0055aa;}
+QPushButton#feedTab[selected="true"] {border-bottom-color:#0071e3;}
+QPushButton#postAction[active="true"],QPushButton#authorName:hover,QPushButton#textLink:hover {color:#0066cc;}
+QLabel#muted,QLabel#eyebrow {color:#62646b;}
+QCheckBox::indicator {background:#ffffff;border-color:#b2bac8;}
+QCheckBox::indicator:checked {background:#0071e3;border-color:#0071e3;}
+QMenuBar,QStatusBar {color:#1d1d1f;}
+"""
+
 class MainWindow(QMainWindow):
     def __init__(self,api=None):
         super().__init__();self.api=api or Api(parent=self);self.me=None;self.page=None;self.history=[];self.seen_alert=0;self.polling=False
@@ -110,7 +141,7 @@ class MainWindow(QMainWindow):
             action.triggered.connect(lambda checked=False,fn=call:fn());menu.addAction(action)
         for label,path in [('API documentation','/agent.md'),('Privacy policy','/privacy'),('Terms and rules','/terms'),('Support','/support')]:
             action=QAction(label,self);action.triggered.connect(lambda checked=False,p=path:open_external(ORIGIN+p));help_menu.addAction(action)
-        about=QAction('About AltStack Social',self);about.triggered.connect(lambda:QMessageBox.about(self,'AltStack Social','AltStack Social 1.0.0\nAltStack LLC\nNative Qt desktop client\nGPL-3.0-only\nWhy Can’t We Be Friends?'));help_menu.addAction(about)
+        about=QAction('About AltStack Social',self);about.triggered.connect(lambda:QMessageBox.about(self,'AltStack Social','AltStack Social 1.3.0\nArtemis Softworks LLC\nFounded by Demetria Althea Cohn\nNative Qt desktop client\nGPL-3.0-only\nWhy Can’t We Be Friends?'));help_menu.addAction(about)
     def navigate(self,name,call):
         self.select_navigation(name);call()
     def select_navigation(self,name):
@@ -218,7 +249,7 @@ class MainWindow(QMainWindow):
         self.login.cancel();self.poller.stop();self.tray.hide();super().closeEvent(event)
 
 def main():
-    app=QApplication(sys.argv);app.setOrganizationName('AltStack LLC');app.setApplicationName('AltStack Social');app.setApplicationDisplayName('AltStack Social');app.setApplicationVersion('1.1.2')
+    app=QApplication(sys.argv);app.setOrganizationName('AltStack LLC');app.setApplicationName('AltStack Social');app.setApplicationDisplayName('AltStack Social');app.setApplicationVersion('1.3.0')
     font_id=QFontDatabase.addApplicationFont(str(asset_path('Inter.ttf')))
     if font_id>=0:app.setFont(QFont(QFontDatabase.applicationFontFamilies(font_id)[0],11))
     smoke='--smoke-test' in sys.argv

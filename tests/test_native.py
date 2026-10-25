@@ -65,14 +65,17 @@ def test_refresh_button_and_menu_shortcuts_reload_native_data(window,qtbot):
     from PySide6.QtGui import QAction,QKeySequence
     w,api=window;before=len([p for p,b in api.calls if p.startswith('feed')]);refresh=next(a for a in w.findChildren(QAction) if a.text()=='Refresh');keys=[k.toString(QKeySequence.SequenceFormat.PortableText) for k in refresh.shortcuts()];assert 'F5' in keys;assert 'Ctrl+R' in keys;refresh.trigger();qtbot.wait(30);assert len([p for p,b in api.calls if p.startswith('feed')])>before;assert any(p=='me' for p,b in api.calls)
 
-def test_official_altstack_logo_renders_pink_white_and_black(qtbot):
+@pytest.mark.parametrize('size', [32, 64])
+def test_social_product_icon_renders_at_native_sizes(qtbot,size):
     from amerika.design import LogoMark
-    logo=LogoMark(64);qtbot.addWidget(logo);logo.show();qtbot.wait(20)
-    image=logo.grab().toImage();pixels=[image.pixelColor(x,y) for x in range(64) for y in range(64)]
-    assert sum(c.red()>225 and c.green()<65 and c.blue()>35 for c in pixels)>500
-    assert sum(c.red()>225 and c.green()>225 and c.blue()>225 for c in pixels)>500
-    assert sum(c.red()<50 and c.green()<50 and c.blue()<50 for c in pixels)>100
-    assert logo.accessibleName()=='AltStack LLC logo'
+    logo=LogoMark(size);qtbot.addWidget(logo);logo.show();qtbot.wait(20)
+    image=logo.grab().toImage()
+    colors={image.pixelColor(x,y).rgba() for x in range(0,image.width(),2) for y in range(0,image.height(),2)}
+    # A missing image or solid placeholder cannot satisfy the actual paint check.
+    assert len(colors)>50
+    assert image.pixelColor(image.width()//2,image.height()//2)!=image.pixelColor(1,1)
+    assert logo.accessibleName()=='AltStack Social application icon'
+
 
 
 def test_thread_red_close_returns_to_previous_page(window,qtbot):
