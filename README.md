@@ -1,6 +1,6 @@
 # AltStack Social for Windows
 
-**AltStack LLC · An alternative stack for everyone.**
+**Artemis Softworks LLC · An alternative stack for everyone.**
 
 
 Why Can’t We Be Friends? Native Qt desktop application for AltStack Social, using the same production backend and accounts as the website. The application interface consists of native widgets, not an embedded website. The three desktop repositories share feature code and keep independent platform packaging.
