@@ -60,7 +60,11 @@ jobs:
     - name: Verify native account flows and icon painting
       env:
         QT_QPA_PLATFORM: offscreen
-      run: python -m pytest -q
+      run: python -m pytest -vv tests/test_native.py
+    - name: Verify isolated network and browser sign-in flows
+      env:
+        QT_QPA_PLATFORM: offscreen
+      run: python -m pytest -vv tests/test_network.py
     - run: python build.py
     - name: Launch packaged application
       shell: bash
