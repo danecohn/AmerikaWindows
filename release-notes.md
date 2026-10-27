@@ -1,3 +1,5 @@
-Vigil Social 1.3.1, a product of VigilTech, vigiltech.org.
+Vigil Social 1.3.2 — VigilTech
 
-VigilTech look: frosted sidebar, soft tiles, one pink accent, light and dark appearance (View > Appearance), Vigil Sans and the Vigil Social icon. Contrast is checked for every colour pair in both themes. Six native packages share the same account service and preserve existing application, session, credential and download identifiers. macOS bundles are ad-hoc signed and strictly verified, not Apple notarized. GPL-3.0-only; upstream notices retained.
+Uses the VigilTech identity and supplied Social icon. Adds per-user Windows installers and Linux AppImage/Debian packages alongside the existing six portable/DMG downloads. Every legacy filename, application identifier and data location is retained; old releases remain available.
+
+macOS packages are ad-hoc signed and strictly verified, not Apple-notarized. Windows installers are unsigned. Linux packages are built on Ubuntu 24.04 and require glibc 2.39 or newer. Install one distribution format at a time; existing per-user launcher overrides are not removed automatically. GPL and third-party notices remain bundled.

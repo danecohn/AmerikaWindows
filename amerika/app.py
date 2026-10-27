@@ -56,7 +56,7 @@ class MainWindow(QMainWindow):
         appearance=view.addMenu('Appearance');group=QActionGroup(self);group.setExclusive(True);current=vt.preference()
         for label,choice in [('Match system','system'),('Light','light'),('Dark','dark')]:
             action=QAction(label,self);action.setCheckable(True);action.setChecked(choice==current);action.triggered.connect(lambda checked=False,c=choice:self.set_appearance(c));group.addAction(action);appearance.addAction(action)
-        about=QAction('About Vigil Social',self);about.triggered.connect(lambda:QMessageBox.about(self,'Vigil Social','Vigil Social 1.3.1\nA product of VigilTech, vigiltech.org.\nNative Qt desktop client\nCopyright © VigilTech. GPL-3.0-only.'));help_menu.addAction(about)
+        about=QAction('About Vigil Social',self);about.triggered.connect(lambda:QMessageBox.about(self,'Vigil Social','Vigil Social 1.3.2\nA product of VigilTech, vigiltech.org.\nNative Qt desktop client\nCopyright © VigilTech. GPL-3.0-only.'));help_menu.addAction(about)
     def restyle(self,choice=None):
         self.theme=vt.apply(QApplication.instance(),self,choice);return self.theme
     def appearance_changed(self):
@@ -176,7 +176,7 @@ class MainWindow(QMainWindow):
         self.login.cancel();self.poller.stop();self.tray.hide();super().closeEvent(event)
 
 def main():
-    app=QApplication(sys.argv);app.setOrganizationName('AltStack LLC');app.setApplicationName('AltStack Social');app.setApplicationDisplayName('Vigil Social');app.setStyle('Fusion');app.setApplicationVersion('1.3.1')
+    app=QApplication(sys.argv);app.setOrganizationName('AltStack LLC');app.setApplicationName('AltStack Social');app.setApplicationDisplayName('Vigil Social');app.setStyle('Fusion');app.setApplicationVersion('1.3.2')
     font_id=QFontDatabase.addApplicationFont(str(asset_path('vigiltech/fonts/VigilSans-Regular.ttf')))
     if font_id>=0:app.setFont(QFont(QFontDatabase.applicationFontFamilies(font_id)[0],11))
     smoke='--smoke-test' in sys.argv
