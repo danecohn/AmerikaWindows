@@ -12,7 +12,21 @@ from PySide6.QtCore import QObject, Signal, QUrl, QFile, QIODevice, QTimer, QSet
 from PySide6.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
 from PySide6.QtGui import QDesktopServices
 
-ORIGIN = 'https://www.amerika.social'
+def _production_origin():
+    # A valid TLS connection and the server's canonical origin gate the domain move.
+    # No passwords or session credentials are sent during discovery.
+    import json
+    import urllib.request
+    try:
+        with urllib.request.urlopen('https://altstack.org/api/config', timeout=3) as response:
+            config = json.load(response)
+        if config.get('canonicalOrigin') == 'https://altstack.org':
+            return 'https://altstack.org'
+    except Exception:
+        pass
+    return 'https://www.amerika.social'
+
+ORIGIN = _production_origin()
 MAX_UPLOAD = 250_000_000
 
 def media_mime(path):
@@ -40,13 +54,13 @@ class Vault:
         return Keyring()
     def load(self):
         try:
-            if not QSettings('Amerika Social','Amerika Social').value('rememberSession',True,type=bool):return None
+            if not QSettings('AltStack Social','AltStack Social').value('rememberSession',True,type=bool):return None
             store=self.backend()
             if store.priority < 1: return None
             return store.get_password(self.service, 'session')
         except Exception: return None
     def save(self, token):
-        settings=QSettings('Amerika Social','Amerika Social');settings.setValue('rememberSession',False);settings.sync()
+        settings=QSettings('AltStack Social','AltStack Social');settings.setValue('rememberSession',False);settings.sync()
         try:
             store=self.backend()
             if store.priority < 1: return False
@@ -55,7 +69,7 @@ class Vault:
             return True
         except Exception: return False
     def clear(self):
-        settings=QSettings('Amerika Social','Amerika Social');settings.setValue('rememberSession',False);settings.sync()
+        settings=QSettings('AltStack Social','AltStack Social');settings.setValue('rememberSession',False);settings.sync()
         try: self.backend().delete_password(self.service, 'session')
         except keyring.errors.PasswordDeleteError: pass
         except Exception: pass

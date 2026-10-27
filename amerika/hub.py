@@ -5,8 +5,9 @@ from .widgets import Page,Listing,Form,Media,text,button,row,clear,field,profile
 from .social import person,handle,PostCard
 from .api import ORIGIN,open_external
 from .design import Avatar
+from .countries import COUNTRIES
 
-CONSENT=[field('americanConfirmed','I am the American operator','bool',False),field('rulesAccepted','I agree to the Community Rules','bool',False)]
+CONSENT=[field('humanConfirmed','I am a human operator','bool',False),field('rulesAccepted','I agree to the Community Rules','bool',False)]
 EXPIRY=[field('days','Expires after days (1–90)','number',30),field('neverExpires','Never expires','bool',False)]
 PERMISSIONS=['read','post','like','follow','profile','messages']
 CONNECTION=[field('name','Connection name',max_length=64),*EXPIRY,field('scopes','Permissions','scopes',['read','post'],PERMISSIONS)]
@@ -134,14 +135,19 @@ class Settings(Page):
         photo_card=QWidget();photo_card.setObjectName('card');photo_layout=QVBoxLayout(photo_card);photo_layout.setContentsMargins(20,20,20,20);photo_layout.setSpacing(14);photo_layout.addWidget(row(Avatar(self.api,me,56),text(me['name']+'  '+handle(me),True)));photo_layout.addWidget(row(button('Change profile picture',lambda:change_photo(self,app.me)),self.action('Remove picture','profile',{'name':me['name'],'bio':me.get('bio',''),'photo':None},after=lambda d:app.update_me(),warning='Remove your current profile picture?')));self.add(photo_card)
         self.form('Your profile','profile',[field('name','Display name',max_length=64),field('bio','Bio','multiline',required=False,max_length=300)],initial=me,after=lambda d:app.update_me())
         self.form('Friends privacy','profile/privacy',[field('friendsPrivate','Keep my friends lists private','bool',False)],extra={'actor':me['id']},initial=me)
-        location=self.section('Optional US location verification');location.addWidget(text('A location check shows presence in the US, not citizenship. Your exact location is not displayed. Sharing is optional.'))
-        location.addWidget(button('Check my current location',lambda:self.locate('location/verify')));location.addWidget(self.action('Remove location verification','location/remove',{},after=lambda d:app.update_me(self.refresh)))
+        country_labels={c['label']+' ('+c['code']+')':c['code'] for c in COUNTRIES}
+        current_country=next((label for label,code in country_labels.items() if code==(me.get('countryDesignation') or {}).get('code')),next(iter(country_labels)))
+        country=self.form('Country badge','account/country',[field('country','Country or region','select',current_country,list(country_labels))],after=lambda d:app.update_me())
+        country_values=country.values
+        def selected_country():
+            values=country_values();values['country']=country_labels[values['country']];return values
+        country.values=selected_country
         codes=self.section('Recovery codes');self.form('Generate new recovery codes','recovery/codes',[field('password','Your current password','password',max_length=256)],extra={'actor':me['id']},layout=codes)
         self.blocks=self.section('Blocked accounts');self.welcome=self.section('Welcome invitations');self.loaders.extend([self.load_blocks,self.load_welcome]);self.refresh()
         preferences=self.section('Desktop preferences');settings=QSettings();notifications=QCheckBox('Notify me about new activity while the app is running');notifications.setChecked(settings.value('notifications',False,type=bool));notifications.toggled.connect(lambda value:settings.setValue('notifications',value));preferences.addWidget(notifications)
         bots=QCheckBox('Include activity from my linked bots');bots.setChecked(settings.value('notifyBots',False,type=bool));bots.toggled.connect(lambda value:settings.setValue('notifyBots',value));preferences.addWidget(bots)
         preferences.addWidget(text('Notifications contain a generic activity alert. Message text and Dating details are not shown on the desktop. The application must be running.'))
-        self.add(row(button('Developer hub',app.developers),button('Makk Social Plus',app.plus),button('Sign out',app.signout)))
+        self.add(row(button('Developer hub',app.developers),button('Cohnsoft Social Plus',app.plus),button('Sign out',app.signout)))
         deletion=self.section('Permanently delete account');deletion.addWidget(text('Deletes your account, linked bots, social data, Dating profile and media. Minimal billing and moderation records may be retained. Backups rotate out separately. Stripe subscriptions are canceled; Apple subscriptions must be canceled separately.'))
         deletion.addWidget(button('Manage Apple subscriptions',lambda:open_external('https://apps.apple.com/account/subscriptions')))
         form=self.form('Delete account','account/delete',[field('password','Current password','password',max_length=256),field('confirmation','Type DELETE',max_length=6)],after=lambda d:app.local_signout(),layout=deletion,submit='Permanently delete my account')
@@ -172,7 +178,7 @@ class Settings(Page):
 
 class Plus(Page):
     def __init__(self,app):
-        super().__init__(app,'Makk Social Plus');self.add(text('Unlimited original posts, an 833-character cap, photo and video uploads, and a verified badge. Linked bots inherit Plus.'))
+        super().__init__(app,'Cohnsoft Social Plus');self.add(text('Unlimited original posts, an 833-character cap, photo and video uploads, and a verified badge. Linked bots inherit Plus.'))
         self.summary=self.add(text('Checking subscription…'));self.loaders.append(self.load);self.load()
         self.add(button('Upgrade securely with Stripe',lambda:self.checkout('billing/checkout'),True));self.add(button('Manage Stripe subscription',lambda:self.checkout('billing/portal')))
         self.add(button('Manage Apple subscription',lambda:open_external('https://apps.apple.com/account/subscriptions')))

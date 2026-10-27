@@ -1,5 +1,6 @@
 from pathlib import Path
 """Shared native desktop visual system. Vector icons remain sharp at any DPI."""
+from pathlib import Path
 import base64
 import re
 from html import escape
@@ -37,15 +38,12 @@ PATHS={
  'chevron-down':'<path d="m5 9 7 7 7-7"/>',
 }
 
-# The same vector artwork as assets/logo.svg and the website logo. Painting it
-# directly avoids platform image-plugin and layout-dependent pixmap handling.
-BRAND_SVG=b'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" color="#273941"><title>Artemis Softworks LLC \xe2\x80\x94 crescent moon and archer\xe2\x80\x99s bow</title><path d="M306.762 99.018A177 177 0 1 0 306.762 412.982A157 157 0 0 1 306.762 99.018Z" fill="currentColor"/><path d="M326 87Q489 256 326 425M326 87V425M264 256H474M449 235l25 21-25 21" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><path d="m380 38 5 17 17 5-17 5-5 17-5-17-17-5 17-5Z" fill="currentColor"/></svg>'
-
 class LogoMark(QWidget):
     def __init__(self,size=44):
-        super().__init__();self.setFixedSize(size,size);self.setAccessibleName('AltStack Social application icon');self.pixmap=QPixmap(str(Path(__file__).resolve().parents[1]/'assets/logo.png'))
+        super().__init__();self.setFixedSize(size,size);self.setAccessibleName('Cohnsoft Social application icon');self.pixmap=QPixmap(str(Path(__file__).resolve().parents[1]/'assets/logo.png'));self.renderer=QSvgRenderer(str(Path(__file__).resolve().parents[1]/'assets/logo.svg'))
     def paintEvent(self,event):
-        painter=QPainter(self);painter.drawPixmap(self.rect(),self.pixmap);painter.end()
+        painter=QPainter(self);painter.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform);painter.setRenderHint(QPainter.RenderHint.Antialiasing);self.renderer.render(painter,QRectF(self.rect()));painter.end()
+
 
 def icon(name,color='#c4c4cc',size=22):
     svg=f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">{PATHS.get(name,PATHS["star"])}</svg>'
@@ -65,7 +63,7 @@ class Avatar(QLabel):
         if source and not source.isNull():
             scaled=source.scaled(size,size,Qt.AspectRatioMode.KeepAspectRatioByExpanding,Qt.TransformationMode.SmoothTransformation);p.drawPixmap((size-scaled.width())//2,(size-scaled.height())//2,scaled)
         else:
-            font=QFont('Inter',int(self.size*.65));font.setWeight(QFont.Weight.DemiBold);p.setFont(font);p.setPen(QColor('#ffd4d9'));p.drawText(pix.rect(),Qt.AlignmentFlag.AlignCenter,(self.actor.get('name') or 'A')[0].upper())
+            font=QFont('Cohn Sans',int(self.size*.65));font.setWeight(QFont.Weight.DemiBold);p.setFont(font);p.setPen(QColor('#e0ecff'));p.drawText(pix.rect(),Qt.AlignmentFlag.AlignCenter,(self.actor.get('name') or 'A')[0].upper())
         p.end();pix.setDevicePixelRatio(2);self.setPixmap(pix)
     def loaded(self,raw):
         if not isValid(self):return
@@ -82,11 +80,11 @@ def timestamp(value):
     except (ValueError,TypeError):return ''
 
 def action(label,name,call,active=False):
-    b=QPushButton(label);b.setObjectName('postAction');b.setProperty('active',active);b.setIcon(icon(name,'#f25d6c' if active else '#aaaab4',18));b.setIconSize(QSize(18,18));b.setAccessibleName(label);b.setCursor(Qt.CursorShape.PointingHandCursor);b.clicked.connect(lambda checked=False:call());return b
+    b=QPushButton(label);b.setObjectName('postAction');b.setProperty('active',active);b.setIcon(icon(name,'#1764bd' if active else '#aaaab4',18));b.setIconSize(QSize(18,18));b.setAccessibleName(label);b.setCursor(Qt.CursorShape.PointingHandCursor);b.clicked.connect(lambda checked=False:call());return b
 
 class PostText(QTextBrowser):
     def __init__(self,app,value):
-        super().__init__();self.app=app;self.setFrameShape(QFrame.Shape.NoFrame);self.setOpenLinks(False);self.setOpenExternalLinks(False);self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff);self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff);self.setSizePolicy(QSizePolicy.Policy.Expanding,QSizePolicy.Policy.Fixed);self.document().setDocumentMargin(0);self.setStyleSheet('QTextBrowser{background:transparent;border:0;color:#263e52;font-size:15px;padding:0;}');self.document().setDefaultStyleSheet('a {color:#ff8b99;text-decoration:none;}')
+        super().__init__();self.app=app;self.setFrameShape(QFrame.Shape.NoFrame);self.setOpenLinks(False);self.setOpenExternalLinks(False);self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff);self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff);self.setSizePolicy(QSizePolicy.Policy.Expanding,QSizePolicy.Policy.Fixed);self.document().setDocumentMargin(0);self.setStyleSheet('QTextBrowser{background:transparent;border:0;color:#1d1d1f;font-size:15px;padding:0;}');self.document().setDefaultStyleSheet('a {color:#1764bd;text-decoration:none;}')
         parts=[];offset=0
         for match in re.finditer(r'https?://[^\s<>]+|(?<!\w)@[a-zA-Z0-9._-]+|(?<!\w)#[\w]+',value):
             parts.append(escape(value[offset:match.start()]));token=match.group()

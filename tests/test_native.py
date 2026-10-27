@@ -36,7 +36,7 @@ def test_profile_photo_is_small_and_strips_metadata(tmp_path):
     source=tmp_path/'photo.png';Image.new('RGB',(1600,1600),'red').save(source);encoded=profile_photo(source);raw=base64.b64decode(encoded.split(',')[1]);assert len(raw)<=150000;assert raw.startswith(b'\xff\xd8\xff')
 
 def test_iphone_media_and_safe_links():
-    assert media_mime('IMG_0001.HEIC')=='image/heic';assert media_mime('IMG_0002.MOV')=='video/quicktime';assert MAX_UPLOAD==250000000;assert not safe_url('javascript:alert(1)');assert not safe_url('https://user:password@example.com');assert safe_url('https://www.amerika.social/privacy')
+    assert media_mime('IMG_0001.HEIC')=='image/heic';assert media_mime('IMG_0002.MOV')=='video/quicktime';assert MAX_UPLOAD==250000000;assert not safe_url('javascript:alert(1)');assert not safe_url('https://user:password@example.com');assert safe_url('https://altstack.io/privacy')
 
 def test_api_rejects_unapproved_origins(qapp):
     with pytest.raises(ValueError):Api('http://evil.example',restore=False)
@@ -74,7 +74,8 @@ def test_social_product_icon_renders_at_native_sizes(qtbot,size):
     # A missing image or solid placeholder cannot satisfy the actual paint check.
     assert len(colors)>50
     assert image.pixelColor(image.width()//2,image.height()//2)!=image.pixelColor(1,1)
-    assert logo.accessibleName()=='AltStack Social application icon'
+    assert logo.accessibleName()=='Cohnsoft Social application icon'
+
 
 
 def test_thread_red_close_returns_to_previous_page(window,qtbot):
