@@ -14,7 +14,7 @@ from .moderation import Moderation
 from .design import icon,LogoMark
 
 STYLE='''
-QWidget {background:transparent;color:#263e52;font-size:14px;font-family:Inter;}
+QWidget {background:transparent;color:#263e52;font-size:14px;font-family:"Cohn Sans";}
 QMainWindow,QWidget#appShell {background:#e5edf4;}
 QWidget#sidebar {background:#e7edf3;border-right:1px solid #bdcbd7;}
 QLabel#heading {font-size:25px;font-weight:700;}
@@ -75,7 +75,7 @@ def asset_path(name):return Path(getattr(sys,'_MEIPASS',Path(__file__).resolve()
 
 STYLE += '\nQMainWindow::separator {background:#aabcc9;}\nQWidget#sidebar {background:qlineargradient(x1:0,y1:0,x2:1,y2:0,stop:0 #e4ebf2,stop:1 #d1dde8);border-right:1px solid #adbdcc;}\nQMenuBar {background:qlineargradient(x1:0,y1:0,x2:0,y2:1,stop:0 #ffffff,stop:1 #d7e1e9);color:#263e52;border-bottom:1px solid #afbdca;}\nQMenuBar::item:selected,QMenu::item:selected {background:#d5eaff;color:#9d0036;}\nQMenu {background:#f8fafc;color:#263e52;border:1px solid #a8b9c7;}\nQWidget#card,QWidget#composeCard,QWidget#sectionCard {background:#ffffff;border:1px solid #becdd9;border-radius:8px;}\nQPushButton {background:qlineargradient(x1:0,y1:0,x2:0,y2:1,stop:0 #fff,stop:1 #dce5ee);color:#2c455a;border:1px solid #acbdcb;border-radius:6px;padding:9px 14px;}\nQPushButton#primary {background:qlineargradient(x1:0,y1:0,x2:0,y2:1,stop:0 #ff8db4,stop:1 #1764bd);color:#26000d;border-color:#c90045;font-weight:700;}\nQPushButton:focus,QLineEdit:focus,QTextEdit:focus,QPlainTextEdit:focus {border:2px solid #1764bd;}\nQLineEdit,QTextEdit,QPlainTextEdit,QComboBox {background:#fff;color:#263e52;border:1px solid #afbfcd;border-radius:6px;padding:8px;selection-background-color:#ffb5ce;selection-color:#26000d;}\nQPushButton#threadClose,QPushButton#threadMinimize,QPushButton#threadMaximize {border-radius:12px;padding:0;font-size:18px;font-weight:700;min-height:24px;max-height:24px;min-width:24px;max-width:24px;}\nQPushButton#threadClose {background:qradialgradient(cx:.4,cy:.2,radius:.9,stop:0 #ffd4ca,stop:.5 #ed796d,stop:1 #be4036);border:1px solid #a43f36;color:#661a15;}\nQPushButton#threadMinimize {background:qradialgradient(cx:.4,cy:.2,radius:.9,stop:0 #fff3c0,stop:.5 #f0cb61,stop:1 #c9a33e);border:1px solid #ad8a32;color:#63501d;}\nQPushButton#threadMaximize {background:qradialgradient(cx:.4,cy:.2,radius:.9,stop:0 #e5ffc5,stop:.5 #a2d46e,stop:1 #6ba742);border:1px solid #6b9641;color:#344e1e;}\nQWidget#threadChrome {background:qlineargradient(x1:0,y1:0,x2:0,y2:1,stop:0 #fff,stop:1 #d5e0e9);border-bottom:1px solid #b0c0cd;border-radius:7px;padding:6px;}\nQToolTip {background:#fff4f8;color:#293f53;border:1px solid #c4a8b3;}\n'
 
-# Artemis Softworks LLC · Moonrise companion interface.
+# Cohnsoft · companion interface.
 STYLE += """
 QMainWindow,QWidget#main {background:#f5f5f7;color:#1d1d1f;}
 QWidget#sidebar {background:qlineargradient(x1:0,y1:0,x2:0,y2:1,stop:0 #f5f7fb,stop:1 #eaf2ff);border-right:1px solid #d5dce8;}
@@ -106,20 +106,23 @@ QCheckBox::indicator:checked {background:#0071e3;border-color:#0071e3;}
 QMenuBar,QStatusBar {color:#1d1d1f;}
 """
 
+STYLE += asset_path('cohnsoft/social.qss').read_text()
+
 class MainWindow(QMainWindow):
     def __init__(self,api=None):
         super().__init__();self.api=api or Api(parent=self);self.me=None;self.page=None;self.history=[];self.seen_alert=0;self.polling=False
         application=QApplication.instance()
         if not application.property('amerikaFontLoaded'):
-            font_id=QFontDatabase.addApplicationFont(str(asset_path('Inter.ttf')))
+            QFontDatabase.addApplicationFont(str(asset_path('cohnsoft/fonts/CohnSans-Bold.ttf')))
+            font_id=QFontDatabase.addApplicationFont(str(asset_path('cohnsoft/fonts/CohnSans-Regular.ttf')))
             if font_id>=0:application.setFont(QFont(QFontDatabase.applicationFontFamilies(font_id)[0],11))
             application.setProperty('amerikaFontLoaded',True)
-        self.setWindowTitle('AltStack Social');self.resize(1320,940);self.setMinimumSize(980,680);self.setWindowIcon(QIcon(str(asset_path('logo.png'))));check_path=str(asset_path('check.svg')).replace('\\','/');self.setStyleSheet(STYLE+f'QCheckBox::indicator:checked {{image:url("{check_path}");}}')
+        self.setWindowTitle('Cohnsoft Social');self.resize(1320,940);self.setMinimumSize(980,680);self.setWindowIcon(QIcon(str(asset_path('logo.png'))));check_path=str(asset_path('check.svg')).replace('\\','/');self.setStyleSheet(STYLE+f'QCheckBox::indicator:checked {{image:url("{check_path}");}}')
         central=QWidget();central.setObjectName('appShell');self.setCentralWidget(central);layout=QHBoxLayout(central);layout.setContentsMargins(0,0,0,0);layout.setSpacing(0);sidebar=QWidget();sidebar.setObjectName('sidebar');sidebar.setFixedWidth(248);nav=QVBoxLayout(sidebar);nav.setContentsMargins(20,28,20,22);nav.setSpacing(12);layout.addWidget(sidebar)
-        logo=LogoMark(44);wordmark=text('AltStack Social',True);wordmark.setStyleSheet('font-size:27px;font-weight:750;');nav.addWidget(row(logo,wordmark))
+        logo=LogoMark(44);wordmark=text('Cohnsoft Social',True);wordmark.setStyleSheet('font-size:22px;font-weight:750;');nav.addWidget(row(logo,wordmark))
         tagline=text('WHY CAN’T WE BE FRIENDS?');tagline.setObjectName('eyebrow');nav.addWidget(tagline);nav.addSpacing(10)
         nav_scroll=QScrollArea();nav_scroll.setWidgetResizable(True);nav_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff);nav_body=QWidget();links=QVBoxLayout(nav_body);links.setContentsMargins(0,0,0,0);links.setSpacing(5);nav_scroll.setWidget(nav_body);nav.addWidget(nav_scroll,1);self.nav_buttons={}
-        groups=[('YOUR SQUARE',[('Home','home',lambda:self.feed()),('My profile','profile',lambda:self.profile(self.me['id']) if self.require_login() else None),('Friends','friends',self.friends),('Discover','search',self.explore),('Messages','messages',self.inbox),('Notifications','bell',self.alerts)]),('FIND YOUR PEOPLE',[('Communities','communities',self.communities),('Dating','heart',self.dating)]),('YOUR ACCOUNT',[('Developer hub','code',self.developers),('Settings','settings',self.settings),('AltStack Plus','star',self.plus)])]
+        groups=[('YOUR SQUARE',[('Home','home',lambda:self.feed()),('My profile','profile',lambda:self.profile(self.me['id']) if self.require_login() else None),('Friends','friends',self.friends),('Discover','search',self.explore),('Messages','messages',self.inbox),('Notifications','bell',self.alerts)]),('FIND YOUR PEOPLE',[('Communities','communities',self.communities),('Dating','heart',self.dating)]),('YOUR ACCOUNT',[('Developer hub','code',self.developers),('Settings','settings',self.settings),('Cohnsoft Plus','star',self.plus)])]
         for group,items in groups:
             caption=text(group);caption.setObjectName('eyebrow');links.addSpacing(12);links.addWidget(caption)
             for title,glyph,call in items:
@@ -131,7 +134,7 @@ class MainWindow(QMainWindow):
         if QSystemTrayIcon.isSystemTrayAvailable():self.tray.show();self.tray.messageClicked.connect(self.alerts)
         self.build_menu();self.feed();self.api.request('me',done=self.restore,error=self.error)
     def build_menu(self):
-        appmenu=self.menuBar().addMenu('AltStack Social');view=self.menuBar().addMenu('View');help_menu=self.menuBar().addMenu('Help')
+        appmenu=self.menuBar().addMenu('Cohnsoft Social');view=self.menuBar().addMenu('View');help_menu=self.menuBar().addMenu('Help')
         for menu,label,shortcut,call in [(appmenu,'Write a post','Ctrl+N',self.compose),(appmenu,'Sign in','',self.signin),(appmenu,'Sign out','',self.signout),(appmenu,'Quit',QKeySequence.StandardKey.Quit,self.close),(view,'Back','Alt+Left',self.back),(view,'Refresh',QKeySequence.StandardKey.Refresh,self.refresh),(view,'Search','Ctrl+K',self.explore)]:
             action=QAction(label,self)
             if label=='Refresh':
@@ -141,12 +144,12 @@ class MainWindow(QMainWindow):
             action.triggered.connect(lambda checked=False,fn=call:fn());menu.addAction(action)
         for label,path in [('API documentation','/agent.md'),('Privacy policy','/privacy'),('Terms and rules','/terms'),('Support','/support')]:
             action=QAction(label,self);action.triggered.connect(lambda checked=False,p=path:open_external(ORIGIN+p));help_menu.addAction(action)
-        about=QAction('About AltStack Social',self);about.triggered.connect(lambda:QMessageBox.about(self,'AltStack Social','AltStack Social 1.3.0\nArtemis Softworks LLC\nFounded by Demetria Althea Cohn\nNative Qt desktop client\nGPL-3.0-only\nWhy Can’t We Be Friends?'));help_menu.addAction(about)
+        about=QAction('About Cohnsoft Social',self);about.triggered.connect(lambda:QMessageBox.about(self,'Cohnsoft Social','Cohnsoft Social 1.3.1\nCohnsoft\nFounded by Demetria Althea Cohn\nNative Qt desktop client\nGPL-3.0-only\nWhy Can’t We Be Friends?'));help_menu.addAction(about)
     def navigate(self,name,call):
         self.select_navigation(name);call()
     def select_navigation(self,name):
         for label,b in self.nav_buttons.items():
-            b.setProperty('selected',label==name);b.setIcon(icon({'Home':'home','My profile':'profile','Friends':'friends','Discover':'search','Messages':'messages','Notifications':'bell','Communities':'communities','Dating':'heart','Developer hub':'code','Settings':'settings','AltStack Plus':'star'}[label],'#174f86' if label==name else '#526b80'));b.style().unpolish(b);b.style().polish(b)
+            b.setProperty('selected',label==name);b.setIcon(icon({'Home':'home','My profile':'profile','Friends':'friends','Discover':'search','Messages':'messages','Notifications':'bell','Communities':'communities','Dating':'heart','Developer hub':'code','Settings':'settings','Cohnsoft Plus':'star'}[label],'#174f86' if label==name else '#526b80'));b.style().unpolish(b);b.style().polish(b)
     def show_page(self,factory,remember=True):
         if self.page:
             self.page.active=False
@@ -154,7 +157,7 @@ class MainWindow(QMainWindow):
             self.pages.removeWidget(self.page);self.page.deleteLater()
         if remember:self.history.append(factory)
         self.page=factory();self.pages.addWidget(self.page);self.pages.setCurrentWidget(self.page)
-        category={Feed:'Home',Profile:'My profile',Inbox:'Messages',Alerts:'Notifications',DeveloperHub:'Developer hub',Settings:'Settings',Plus:'AltStack Plus',Communities:'Communities',Dating:'Dating',Explore:'Discover'}.get(type(self.page))
+        category={Feed:'Home',Profile:'My profile',Inbox:'Messages',Alerts:'Notifications',DeveloperHub:'Developer hub',Settings:'Settings',Plus:'Cohnsoft Plus',Communities:'Communities',Dating:'Dating',Explore:'Discover'}.get(type(self.page))
         if category:self.select_navigation(category)
     def back(self):
         if len(self.history)>1:self.history.pop();self.show_page(self.history[-1],False)
@@ -175,7 +178,7 @@ class MainWindow(QMainWindow):
         self.signin();return False
     def signin(self):
         if self.me:return
-        d=QDialog(self);self.login_dialog=d;d.setWindowTitle('Connect AltStack Social');d.resize(500,240);layout=QVBoxLayout(d);layout.addWidget(text('Sign in or create your human account in your browser. Complete the human CAPTCHA there, then return here. Your password is never stored in this application.'))
+        d=QDialog(self);self.login_dialog=d;d.setWindowTitle('Connect Cohnsoft Social');d.resize(500,240);layout=QVBoxLayout(d);layout.addWidget(text('Sign in or create your human account in your browser. Complete the human CAPTCHA there, then return here. Your password is never stored in this application.'))
         status=text('');layout.addWidget(status)
         opened=lambda:status.setText('Browser opened. Waiting for your approval…')
         failed=lambda message:status.setText(message)
@@ -230,7 +233,7 @@ class MainWindow(QMainWindow):
         self.polling=True
         def done(data):
             self.polling=False;rows=data.get('notifications',[]);latest=max([n['id'] for n in rows]+[0]);settings=QSettings()
-            if self.seen_alert and latest>self.seen_alert and settings.value('notifications',False,type=bool):self.tray.showMessage('AltStack Social','You have new account activity.',QSystemTrayIcon.MessageIcon.Information,6000)
+            if self.seen_alert and latest>self.seen_alert and settings.value('notifications',False,type=bool):self.tray.showMessage('Cohnsoft Social','You have new account activity.',QSystemTrayIcon.MessageIcon.Information,6000)
             self.seen_alert=latest
             if isinstance(self.page,Inbox) and self.page.peer:self.page.refresh()
             if isinstance(self.page,Dating) and self.page.view in ('chat','inbox'):self.page.refresh()
@@ -243,14 +246,14 @@ class MainWindow(QMainWindow):
         self.api.request('agents',done=bots,error=lambda e:None)
     def bot_activity(self,id,data):
         latest=max([n['id'] for n in data.get('notifications',[])]+[0]);seen=getattr(self,'bot_seen',{});previous=seen.get(id);seen[id]=latest;self.bot_seen=seen
-        if previous and latest>previous:self.tray.showMessage('AltStack Social','One of your bots has new activity.',QSystemTrayIcon.MessageIcon.Information,6000)
+        if previous and latest>previous:self.tray.showMessage('Cohnsoft Social','One of your bots has new activity.',QSystemTrayIcon.MessageIcon.Information,6000)
     def closeEvent(self,event):
         if self.page:self.page.active=False
         self.login.cancel();self.poller.stop();self.tray.hide();super().closeEvent(event)
 
 def main():
-    app=QApplication(sys.argv);app.setOrganizationName('AltStack LLC');app.setApplicationName('AltStack Social');app.setApplicationDisplayName('AltStack Social');app.setApplicationVersion('1.3.0')
-    font_id=QFontDatabase.addApplicationFont(str(asset_path('Inter.ttf')))
+    app=QApplication(sys.argv);app.setOrganizationName('AltStack LLC');app.setApplicationName('AltStack Social');app.setApplicationDisplayName('Cohnsoft Social');app.setApplicationVersion('1.3.1')
+    font_id=QFontDatabase.addApplicationFont(str(asset_path('cohnsoft/fonts/CohnSans-Regular.ttf')))
     if font_id>=0:app.setFont(QFont(QFontDatabase.applicationFontFamilies(font_id)[0],11))
     smoke='--smoke-test' in sys.argv
     window=MainWindow(Api(restore=False) if smoke else None);window.show()

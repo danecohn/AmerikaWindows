@@ -22,10 +22,11 @@ if not arch:raise SystemExit('Unsupported build architecture: '+platform.machine
 if sys.platform=='darwin':
     app=root/'dist/AltStackSocial.app'
     import plistlib
-    info=app/'Contents/Info.plist';data=plistlib.loads(info.read_bytes());data.update(CFBundleName='AltStack Social',CFBundleDisplayName='AltStack Social',CFBundleShortVersionString='1.3.0',CFBundleVersion='5',NSLocationWhenInUseUsageDescription='Optionally verify US presence or display approximate Dating distance.',NSHighResolutionCapable=True);info.write_bytes(plistlib.dumps(data))
+    info=app/'Contents/Info.plist';data=plistlib.loads(info.read_bytes());data.update(CFBundleName='Cohnsoft Social',CFBundleDisplayName='Cohnsoft Social',CFBundleShortVersionString='1.3.1',CFBundleVersion='6',NSLocationWhenInUseUsageDescription='Optionally verify US presence or display approximate Dating distance.',NSHighResolutionCapable=True);info.write_bytes(plistlib.dumps(data))
     # Ad-hoc signing allows local testing. Public distribution still requires Developer ID signing and notarization.
     subprocess.run(['codesign','--force','--deep','--sign','-',str(app)],check=True)
-    subprocess.run(['hdiutil','create','-volname','AltStack Social','-srcfolder',str(app),'-ov','-format','UDZO',str(release/f'AltStackSocial-macos-{arch}.dmg')],check=True)
+    subprocess.run(['codesign','--verify','--deep','--strict','--verbose=2',str(app)],check=True)
+    subprocess.run(['hdiutil','create','-volname','Cohnsoft Social','-srcfolder',str(app),'-ov','-format','UDZO',str(release/f'AltStackSocial-macos-{arch}.dmg')],check=True)
 elif sys.platform=='win32':shutil.make_archive(str(release/f'AltStackSocial-windows-{arch}'),'zip',root/'dist','AltStackSocial')
 else:
     out=root/'dist/AltStackSocial';shutil.copy2(root/'packaging/amerika-social.desktop',out);shutil.copy2(root/'packaging/install-linux.sh',out);(out/'install-linux.sh').chmod(0o755)

@@ -1,9 +1,9 @@
-# AltStack Social for Windows
+# Cohnsoft Social for Windows
 
-**Artemis Softworks LLC · An alternative stack for everyone.**
+**A product of Cohnsoft. Founded by Demetria Althea Cohn.**
 
 
-Why Can’t We Be Friends? Native Qt desktop application for AltStack Social, using the same production backend and accounts as the website. The application interface consists of native widgets, not an embedded website. The three desktop repositories share feature code and keep independent platform packaging.
+Why Can’t We Be Friends? Native Qt desktop application for Cohnsoft Social, using the same production backend and accounts as the website. The application interface consists of native widgets, not an embedded website. The three desktop repositories share feature code and keep independent platform packaging.
 
 ## Run from source
 
@@ -28,11 +28,11 @@ Sessions are stored in Windows Credential Manager, macOS Keychain, or a Linux Se
 - Plus-aware 300/833-character limits and 250 MB media selection, including iPhone HEIC/HEIF photos and MOV video. The server checks entitlements, duration, quotas and content types. Profile photos are resized and stripped of metadata before upload.
 - Profiles, Posts/Replies tabs, private Friends/Added/Mutual lists, directional friendship, family-aware account blocking and prohibited-conduct reports.
 - Direct messages, history, read state, notifications and replying to the actual notified post. Running-app desktop alerts are opt-in and omit private content; optional owned-bot alerts are available. Notifications are not delivered while the application is closed.
-- Makk Communities: discovery, joined timelines, creation, joining/leaving, posting, member roles and restrictions, ownership transfer, community settings, archive/restore and post moderation.
-- Makk Dating: human-only 18+ onboarding, private drafts, up to six photos, profile grid, age/gender/sexuality/dynamic/intent filters, bios and prompts, optional approximate distance, message requests, accept/decline, matches, private chat and 250 MB photos/video, unmatch, block, private reporting, pause and deletion. Private media links renew when expired.
+- Cohnsoft Communities: discovery, joined timelines, creation, joining/leaving, posting, member roles and restrictions, ownership transfer, community settings, archive/restore and post moderation.
+- Cohnsoft Dating: human-only 18+ onboarding, private drafts, up to six photos, profile grid, age/gender/sexuality/dynamic/intent filters, bios and prompts, optional approximate distance, message requests, accept/decline, matches, private chat and 250 MB photos/video, unmatch, block, private reporting, pause and deletion. Private media links renew when expired.
 - Developer hub: create/link bots, profile photos, bios, personality, privacy and recovery, manual bot posts and activity, bot API credentials, OAuth MCP connections with expiry or no expiry, service-wide account MCP, authorized-app revocation, signed webhooks/custom signing secrets/tests/delivery status, MCP event subscriptions, and API documentation.
 - Account settings: profile/photo, friends privacy, welcome invitations, recovery codes, blocked accounts, optional location verification, sign-out and permanent deletion with password plus typed confirmation.
-- AltStack Social Plus: existing entitlements sync across clients; purchase/manage via secure Stripe browser checkout. Apple subscriptions are managed separately through Apple. Desktop apps do not claim StoreKit purchases or collect card data.
+- Cohnsoft Social Plus: existing entitlements sync across clients; purchase/manage via secure Stripe browser checkout. Apple subscriptions are managed separately through Apple. Desktop apps do not claim StoreKit purchases or collect card data.
 - Role-protected moderation/admin dashboard: reports, content/account review, reversible decisions with evidence, audit, staff roles, moderation OAuth MCP and webhook controls, private Dating reports, backup status/actions and deletion jobs. Server authorization remains authoritative.
 
 Use the top-right Refresh button, F5, Ctrl+R on Windows/Linux, or Command+R on macOS to reload the current view and account status. Editable form drafts are preserved during refresh. Ctrl+N writes a post; Ctrl+K opens discovery; Alt+Left navigates back. Native system file pickers, menus, keyboard focus and selectable text are supported. Video playback uses Qt Multimedia and available system codecs. Location is opt-in; some Linux environments have no location provider, in which case the feature reports that it is unavailable.
@@ -53,4 +53,6 @@ GitHub Actions runs tests and creates an OS-native package on each source push. 
 
 Test sign-in/CAPTCHA and recovery using your own test account; complete a Test Mode Stripe checkout before billing rollout; test microphone-free video playback and 250 MB file uploads on your target devices; grant location only when desired; test OS notifications and keyring persistence in the destination environment. Configure platform signing before public distribution. CI smoke tests and fixture screenshots do not certify all live payment, location-provider or codec combinations.
 
-All desktop repositories are GPL-3.0-only, consistent with the AltStack Social projects. Keep `LICENSE` and third-party notices with redistributions. See `SECURITY.md`, `FEATURE-PARITY.md` and `THIRD-PARTY-NOTICES.md`.
+All desktop repositories are GPL-3.0-only, consistent with the Cohnsoft Social projects. Keep `LICENSE` and third-party notices with redistributions. See `SECURITY.md`, `FEATURE-PARITY.md` and `THIRD-PARTY-NOTICES.md`.
+
+The central release builds all six desktop architectures. Existing executable/bundle, Qt application/organization, credential-service, config/session and installer identifiers remain unchanged for upgrade compatibility. Canonical company assets and local Cohn Sans are pinned unchanged to cohnsoftassets `752e894f90f1e58e62ae466352cb03c8bfd7d703`. Original product SVG and Sprite sources are included.

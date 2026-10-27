@@ -39,9 +39,9 @@ PATHS={
 
 class LogoMark(QWidget):
     def __init__(self,size=44):
-        super().__init__();self.setFixedSize(size,size);self.setAccessibleName('AltStack Social application icon');self.pixmap=QPixmap(str(Path(__file__).resolve().parents[1]/'assets/logo.png'))
+        super().__init__();self.setFixedSize(size,size);self.setAccessibleName('Cohnsoft Social application icon');self.pixmap=QPixmap(str(Path(__file__).resolve().parents[1]/'assets/logo.png'));self.renderer=QSvgRenderer(str(Path(__file__).resolve().parents[1]/'assets/logo.svg'))
     def paintEvent(self,event):
-        painter=QPainter(self);painter.drawPixmap(self.rect(),self.pixmap);painter.end()
+        painter=QPainter(self);painter.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform);painter.setRenderHint(QPainter.RenderHint.Antialiasing);self.renderer.render(painter,QRectF(self.rect()));painter.end()
 
 
 def icon(name,color='#c4c4cc',size=22):
@@ -62,7 +62,7 @@ class Avatar(QLabel):
         if source and not source.isNull():
             scaled=source.scaled(size,size,Qt.AspectRatioMode.KeepAspectRatioByExpanding,Qt.TransformationMode.SmoothTransformation);p.drawPixmap((size-scaled.width())//2,(size-scaled.height())//2,scaled)
         else:
-            font=QFont('Inter',int(self.size*.65));font.setWeight(QFont.Weight.DemiBold);p.setFont(font);p.setPen(QColor('#e0ecff'));p.drawText(pix.rect(),Qt.AlignmentFlag.AlignCenter,(self.actor.get('name') or 'A')[0].upper())
+            font=QFont('Cohn Sans',int(self.size*.65));font.setWeight(QFont.Weight.DemiBold);p.setFont(font);p.setPen(QColor('#e0ecff'));p.drawText(pix.rect(),Qt.AlignmentFlag.AlignCenter,(self.actor.get('name') or 'A')[0].upper())
         p.end();pix.setDevicePixelRatio(2);self.setPixmap(pix)
     def loaded(self,raw):
         if not isValid(self):return
@@ -83,7 +83,7 @@ def action(label,name,call,active=False):
 
 class PostText(QTextBrowser):
     def __init__(self,app,value):
-        super().__init__();self.app=app;self.setFrameShape(QFrame.Shape.NoFrame);self.setOpenLinks(False);self.setOpenExternalLinks(False);self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff);self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff);self.setSizePolicy(QSizePolicy.Policy.Expanding,QSizePolicy.Policy.Fixed);self.document().setDocumentMargin(0);self.setStyleSheet('QTextBrowser{background:transparent;border:0;color:#263e52;font-size:15px;padding:0;}');self.document().setDefaultStyleSheet('a {color:#1764bd;text-decoration:none;}')
+        super().__init__();self.app=app;self.setFrameShape(QFrame.Shape.NoFrame);self.setOpenLinks(False);self.setOpenExternalLinks(False);self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff);self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff);self.setSizePolicy(QSizePolicy.Policy.Expanding,QSizePolicy.Policy.Fixed);self.document().setDocumentMargin(0);self.setStyleSheet('QTextBrowser{background:transparent;border:0;color:#1d1d1f;font-size:15px;padding:0;}');self.document().setDefaultStyleSheet('a {color:#1764bd;text-decoration:none;}')
         parts=[];offset=0
         for match in re.finditer(r'https?://[^\s<>]+|(?<!\w)@[a-zA-Z0-9._-]+|(?<!\w)#[\w]+',value):
             parts.append(escape(value[offset:match.start()]));token=match.group()
