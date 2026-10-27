@@ -11,6 +11,7 @@ from PySide6.QtGui import QIcon,QPixmap,QPainter,QPainterPath,QColor,QFont
 from PySide6.QtSvg import QSvgRenderer
 from PySide6.QtWidgets import QLabel,QPushButton,QTextBrowser,QSizePolicy,QFrame,QWidget
 from shiboken6 import isValid
+from .vigiltech import tone
 
 PATHS={
  'home':'<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',
@@ -40,12 +41,13 @@ PATHS={
 
 class LogoMark(QWidget):
     def __init__(self,size=44):
-        super().__init__();self.setFixedSize(size,size);self.setAccessibleName('Cohnsoft Social application icon');self.pixmap=QPixmap(str(Path(__file__).resolve().parents[1]/'assets/logo.png'));self.renderer=QSvgRenderer(str(Path(__file__).resolve().parents[1]/'assets/logo.svg'))
+        super().__init__();self.setFixedSize(size,size);self.setAccessibleName('Vigil Social application icon');self.pixmap=QPixmap(str(Path(__file__).resolve().parents[1]/'assets/vigiltech/icons/social-256.png'))
     def paintEvent(self,event):
-        painter=QPainter(self);painter.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform);painter.setRenderHint(QPainter.RenderHint.Antialiasing);self.renderer.render(painter,QRectF(self.rect()));painter.end()
+        painter=QPainter(self);painter.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform);painter.setRenderHint(QPainter.RenderHint.Antialiasing);painter.drawPixmap(QRectF(self.rect()),self.pixmap,QRectF(self.pixmap.rect()));painter.end()
 
 
-def icon(name,color='#c4c4cc',size=22):
+def icon(name,color=None,size=22):
+    color=color or tone('icon')
     svg=f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="{color}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">{PATHS.get(name,PATHS["star"])}</svg>'
     pix=QPixmap(size*2,size*2);pix.fill(Qt.GlobalColor.transparent);p=QPainter(pix);QSvgRenderer(QByteArray(svg.encode())).render(p);p.end();pix.setDevicePixelRatio(2);return QIcon(pix)
 
@@ -59,11 +61,11 @@ class Avatar(QLabel):
                 except (ValueError,IndexError):pass
             else:api.asset(photo,self.loaded)
     def paint_avatar(self,source=None):
-        size=self.size*2;pix=QPixmap(size,size);pix.fill(Qt.GlobalColor.transparent);p=QPainter(pix);p.setRenderHint(QPainter.RenderHint.Antialiasing);path=QPainterPath();path.addEllipse(0,0,size,size);p.setClipPath(path);p.fillRect(0,0,size,size,QColor('#3b2730'))
+        size=self.size*2;pix=QPixmap(size,size);pix.fill(Qt.GlobalColor.transparent);p=QPainter(pix);p.setRenderHint(QPainter.RenderHint.Antialiasing);path=QPainterPath();path.addEllipse(0,0,size,size);p.setClipPath(path);p.fillRect(0,0,size,size,QColor('#a8003a'))
         if source and not source.isNull():
             scaled=source.scaled(size,size,Qt.AspectRatioMode.KeepAspectRatioByExpanding,Qt.TransformationMode.SmoothTransformation);p.drawPixmap((size-scaled.width())//2,(size-scaled.height())//2,scaled)
         else:
-            font=QFont('Cohn Sans',int(self.size*.65));font.setWeight(QFont.Weight.DemiBold);p.setFont(font);p.setPen(QColor('#e0ecff'));p.drawText(pix.rect(),Qt.AlignmentFlag.AlignCenter,(self.actor.get('name') or 'A')[0].upper())
+            font=QFont('Vigil Sans',int(self.size*.65));font.setWeight(QFont.Weight.DemiBold);p.setFont(font);p.setPen(QColor('#ffffff'));p.drawText(pix.rect(),Qt.AlignmentFlag.AlignCenter,(self.actor.get('name') or 'A')[0].upper())
         p.end();pix.setDevicePixelRatio(2);self.setPixmap(pix)
     def loaded(self,raw):
         if not isValid(self):return
@@ -80,11 +82,11 @@ def timestamp(value):
     except (ValueError,TypeError):return ''
 
 def action(label,name,call,active=False):
-    b=QPushButton(label);b.setObjectName('postAction');b.setProperty('active',active);b.setIcon(icon(name,'#1764bd' if active else '#aaaab4',18));b.setIconSize(QSize(18,18));b.setAccessibleName(label);b.setCursor(Qt.CursorShape.PointingHandCursor);b.clicked.connect(lambda checked=False:call());return b
+    b=QPushButton(label);b.setObjectName('postAction');b.setProperty('active',active);b.setIcon(icon(name,tone('tint_text') if active else tone('label2'),18));b.setIconSize(QSize(18,18));b.setAccessibleName(label);b.setCursor(Qt.CursorShape.PointingHandCursor);b.clicked.connect(lambda checked=False:call());return b
 
 class PostText(QTextBrowser):
     def __init__(self,app,value):
-        super().__init__();self.app=app;self.setFrameShape(QFrame.Shape.NoFrame);self.setOpenLinks(False);self.setOpenExternalLinks(False);self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff);self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff);self.setSizePolicy(QSizePolicy.Policy.Expanding,QSizePolicy.Policy.Fixed);self.document().setDocumentMargin(0);self.setStyleSheet('QTextBrowser{background:transparent;border:0;color:#1d1d1f;font-size:15px;padding:0;}');self.document().setDefaultStyleSheet('a {color:#1764bd;text-decoration:none;}')
+        super().__init__();self.app=app;self.setFrameShape(QFrame.Shape.NoFrame);self.setOpenLinks(False);self.setOpenExternalLinks(False);self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff);self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff);self.setSizePolicy(QSizePolicy.Policy.Expanding,QSizePolicy.Policy.Fixed);self.document().setDocumentMargin(0);self.setStyleSheet('QTextBrowser{background:transparent;border:0;color:'+tone('label')+';font-size:15px;padding:0;}');self.document().setDefaultStyleSheet('a {color:'+tone('tint_text')+';text-decoration:underline;}')
         parts=[];offset=0
         for match in re.finditer(r'https?://[^\s<>]+|(?<!\w)@[a-zA-Z0-9._-]+|(?<!\w)#[\w]+',value):
             parts.append(escape(value[offset:match.start()]));token=match.group()

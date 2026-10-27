@@ -10,4 +10,4 @@ ln -sf "$TARGET/AltStackSocial" "$HOME/.local/bin/AltStackSocial"
 ln -sf "$TARGET/AltStackSocial" "$HOME/.local/bin/altstack-social"
 cp "$TARGET/_internal/assets/logo.png" "$HOME/.local/share/icons/hicolor/512x512/apps/altstack-social.png"
 sed "s|Exec=AltStackSocial|Exec=\"$TARGET/AltStackSocial\"|" "$SOURCE/altstack-social.desktop" > "$HOME/.local/share/applications/altstack-social.desktop"
-printf '%s\n' 'Installed Cohnsoft Social for the current user.'
+printf '%s\n' 'Installed Vigil Social for the current user.'

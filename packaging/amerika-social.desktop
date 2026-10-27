@@ -1,6 +1,6 @@
 [Desktop Entry]
-Name=Cohnsoft Social
-Comment=Why Can't We Be Friends?
+Name=Vigil Social
+Comment=Native desktop client for Vigil Social
 Type=Application
 Exec=AltStackSocial
 Icon=altstack-social
