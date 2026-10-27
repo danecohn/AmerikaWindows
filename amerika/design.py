@@ -1,3 +1,4 @@
+from pathlib import Path
 """Shared native desktop visual system. Vector icons remain sharp at any DPI."""
 from pathlib import Path
 import base64
