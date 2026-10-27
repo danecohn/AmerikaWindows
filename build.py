@@ -22,7 +22,7 @@ if not arch:raise SystemExit('Unsupported build architecture: '+platform.machine
 if sys.platform=='darwin':
     app=root/'dist/AltStackSocial.app'
     import plistlib
-    info=app/'Contents/Info.plist';data=plistlib.loads(info.read_bytes());data.update(CFBundleName='Vigil Social',CFBundleDisplayName='Vigil Social',NSHumanReadableCopyright='Copyright © VigilTech. GPL-3.0-only.',CFBundleShortVersionString='1.3.1',CFBundleVersion='6',NSLocationWhenInUseUsageDescription='Optionally verify US presence or display approximate Dating distance.',NSHighResolutionCapable=True);info.write_bytes(plistlib.dumps(data))
+    info=app/'Contents/Info.plist';data=plistlib.loads(info.read_bytes());data.update(CFBundleName='Vigil Social',CFBundleDisplayName='Vigil Social',NSHumanReadableCopyright='Copyright © VigilTech. GPL-3.0-only.',CFBundleShortVersionString='1.3.2',CFBundleVersion='7',NSLocationWhenInUseUsageDescription='Optionally verify US presence or display approximate Dating distance.',NSHighResolutionCapable=True);info.write_bytes(plistlib.dumps(data))
     # Ad-hoc signing allows local testing. Public distribution still requires Developer ID signing and notarization.
     subprocess.run(['codesign','--force','--deep','--sign','-',str(app)],check=True)
     subprocess.run(['codesign','--verify','--deep','--strict','--verbose=2',str(app)],check=True)
